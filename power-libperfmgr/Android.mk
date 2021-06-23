@@ -39,6 +39,10 @@ LOCAL_SRC_FILES := \
 
 LOCAL_CFLAGS := -Wno-unused-parameter -Wno-unused-variable
 
+ifneq ($(TARGET_TAP_TO_WAKE_NODE),)
+    LOCAL_CFLAGS += -DTAP_TO_WAKE_NODE=\"$(TARGET_TAP_TO_WAKE_NODE)\"
+endif
+
 LOCAL_MODULE := android.hardware.power-service.asus_sdm660-libperfmgr
 LOCAL_INIT_RC := android.hardware.power-service.asus_sdm660-libperfmgr.rc
 LOCAL_MODULE_TAGS := optional
