@@ -19,8 +19,5 @@ cc_library_static {
     recovery_available: true,
     srcs: ["init_X00TD.cpp"],
     shared_libs: ["libbase"],
-    include_dirs: [
-        "system/core/init",
-        "system/libbase/include"
-    ]
+    include_dirs: ["system/core/init"]
 }
