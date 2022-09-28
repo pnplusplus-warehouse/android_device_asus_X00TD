@@ -28,30 +28,24 @@
    IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <cstdlib>
 #include <fstream>
-#include <string.h>
-#include <sys/sysinfo.h>
-#include <unistd.h>
+#include <vector>
 
 #include <android-base/properties.h>
 #define _REALLY_INCLUDE_SYS__SYSTEM_PROPERTIES_H_
 #include <sys/_system_properties.h>
-
-#include "vendor_init.h"
-#include "property_service.h"
+#include <sys/sysinfo.h>
 
 using android::base::GetProperty;
-using std::string;
 
-void property_override(string prop, string value)
-{
-    auto pi = (prop_info*) __system_property_find(prop.c_str());
+void property_override(char const prop[], char const value[], bool add = true) {
+    prop_info* pi;
 
-    if (pi != nullptr)
-        __system_property_update(pi, value.c_str(), value.size());
-    else
-        __system_property_add(prop.c_str(), prop.size(), value.c_str(), value.size());
+    pi = (prop_info*)__system_property_find(prop);
+    if (pi)
+        __system_property_update(pi, value, strlen(value));
+    else if (add)
+        __system_property_add(prop, strlen(prop), value, strlen(value));
 }
 
 void set_avoid_gfxaccel_config() {
@@ -64,8 +58,7 @@ void set_avoid_gfxaccel_config() {
     }
 }
 
-void NFC_check()
-{
+void NFC_check() {
     // Check NFC
     std::ifstream infile("/proc/NFC_CHECK");
     std::string check;
@@ -78,8 +71,23 @@ void NFC_check()
         property_override("ro.hq.support.nfc", "0");
 }
 
-void vendor_load_properties()
-{
+void load_X00TD() {
+    property_override("bluetooth.device.default_name", "Zenfone Max Pro M1");
+    property_override("ro.product.brand", "asus");
+    property_override("ro.product.manufacturer", "asus");
+    property_override("ro.product.device", "ASUS_X00T_2");
+    property_override("ro.vendor.product.device", "ASUS_X00T_2");
+    property_override("ro.product.name", "WW_X00TD");
+    property_override("ro.vendor.product.name", "WW_X00TD");
+    property_override("ro.build.fingerprint", "asus/WW_X00TD/ASUS_X00T_2:9/PKQ1/16.2017.2009.087-20200826:user/release-keys");
+    property_override("ro.vendor.build.fingerprint", "asus/WW_X00TD/ASUS_X00T_2:9/PKQ1/16.2017.2009.087-20200826:user/release-keys");
+    property_override("ro.bootimage.build.fingerprint", "asus/WW_X00TD/ASUS_X00T_2:9/PKQ1/16.2017.2009.087-20200826:user/release-keys");
+    property_override("ro.build.description", "sdm660_64-user 9 PKQ1 43 release-keys");
+    property_override("vendor.usb.product_string", "Zenfone Max Pro M1");
+}
+
+void vendor_load_properties() {
+    load_X00TD();
     set_avoid_gfxaccel_config();
     NFC_check();
 }
