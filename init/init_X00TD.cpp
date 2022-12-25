@@ -31,6 +31,7 @@
 #include <fstream>
 #include <vector>
 
+#include <android-base/logging.h>
 #include <android-base/properties.h>
 #define _REALLY_INCLUDE_SYS__SYSTEM_PROPERTIES_H_
 #include <sys/_system_properties.h>
@@ -87,7 +88,9 @@ void load_X00TD() {
 }
 
 void vendor_load_properties() {
-    load_X00TD();
+    if (access("/system/bin/recovery", F_OK) != 0) {
+        load_X00TD();
+    }
     set_avoid_gfxaccel_config();
     NFC_check();
 }
