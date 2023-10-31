@@ -4,7 +4,7 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
-COMMON_PATH := device/asus/sdm660-common
+DEVICE_PATH := device/asus/X00TD
 
 BUILD_BROKEN_ELF_PREBUILT_PRODUCT_COPY_FILES := true
 
@@ -21,6 +21,10 @@ TARGET_2ND_CPU_ABI := armeabi-v7a
 TARGET_2ND_CPU_ABI2 := armeabi
 TARGET_2ND_CPU_VARIANT := cortex-a73
 
+# Assert
+TARGET_BOARD_INFO_FILE := $(DEVICE_PATH)/board-info.txt
+TARGET_OTA_ASSERT_DEVICE := ASUS_X00TD,X00TD,X00T
+
 # Audio
 AUDIO_FEATURE_ENABLED_EXT_AMPLIFIER := true
 AUDIO_FEATURE_ENABLED_FM_POWER_OPT := true
@@ -32,6 +36,7 @@ BOARD_USES_ALSA_AUDIO := true
 BOARD_ANT_WIRELESS_DEVICE := "qualcomm-hidl"
 
 # Bootloader
+TARGET_BOOTLOADER_BOARD_NAME := sdm636
 TARGET_NO_BOOTLOADER := true
 
 # Display
@@ -44,7 +49,22 @@ TARGET_USES_ION := true
 TARGET_ENABLE_MEDIADRM_64 := true
 
 # Filesystem
-TARGET_FS_CONFIG_GEN := $(COMMON_PATH)/config.fs
+TARGET_FS_CONFIG_GEN := $(DEVICE_PATH)/config.fs
+
+# GPS
+BOARD_VENDOR_QCOM_GPS_LOC_API_HARDWARE := default
+LOC_HIDL_VERSION := 4.0
+
+# HIDL
+DEVICE_FRAMEWORK_MANIFEST_FILE := $(DEVICE_PATH)/framework_manifest.xml
+DEVICE_MANIFEST_FILE := $(DEVICE_PATH)/manifest.xml
+DEVICE_MATRIX_FILE := $(DEVICE_PATH)/compatibility_matrix.xml
+
+ODM_MANIFEST_SKUS += NFC
+ODM_MANIFEST_NFC_FILES := $(DEVICE_PATH)/manifest_nfc.xml
+
+# Init
+TARGET_INIT_VENDOR_LIB := //$(DEVICE_PATH):libinit_X00TD
 
 # Kernel
 BOARD_KERNEL_CMDLINE := console=ttyMSM0,115200n8 androidboot.console=ttyMSM0
@@ -58,22 +78,7 @@ BOARD_KERNEL_PAGESIZE    := 4096
 BOARD_KERNEL_IMAGE_NAME  := Image.gz-dtb
 
 TARGET_KERNEL_SOURCE := kernel/asus/sdm660
-
-# GPS
-BOARD_VENDOR_QCOM_GPS_LOC_API_HARDWARE := default
-LOC_HIDL_VERSION := 4.0
-
-# HIDL
-DEVICE_FRAMEWORK_MANIFEST_FILE := $(COMMON_PATH)/framework_manifest.xml
-DEVICE_MANIFEST_FILE := $(COMMON_PATH)/manifest.xml
-DEVICE_MATRIX_FILE := $(COMMON_PATH)/compatibility_matrix.xml
-
-ODM_MANIFEST_SKUS += NFC
-ODM_MANIFEST_NFC_FILES := $(COMMON_PATH)/manifest_nfc.xml
-
-# Init
-TARGET_INIT_VENDOR_LIB := //$(COMMON_PATH):libinit_sdm660
-TARGET_RECOVERY_DEVICE_MODULES := libinit_sdm660
+TARGET_KERNEL_CONFIG := X00TD_defconfig
 
 # Partitions
 BOARD_FLASH_BLOCK_SIZE := 262144 # (BOARD_KERNEL_PAGESIZE * 64)
@@ -105,21 +110,21 @@ TARGET_USES_INTERACTION_BOOST := true
 TARGET_TAP_TO_WAKE_NODE := "/proc/tpd_gesture"
 
 # Properties
-TARGET_ODM_PROP += $(COMMON_PATH)/odm.prop
-TARGET_PRODUCT_PROP += $(COMMON_PATH)/product.prop
-TARGET_SYSTEM_PROP += $(COMMON_PATH)/system.prop
-TARGET_SYSTEM_EXT_PROP += $(COMMON_PATH)/system_ext.prop
-TARGET_VENDOR_PROP += $(COMMON_PATH)/vendor.prop
+TARGET_ODM_PROP += $(DEVICE_PATH)/odm.prop
+TARGET_PRODUCT_PROP += $(DEVICE_PATH)/product.prop
+TARGET_SYSTEM_PROP += $(DEVICE_PATH)/system.prop
+TARGET_SYSTEM_EXT_PROP += $(DEVICE_PATH)/system_ext.prop
+TARGET_VENDOR_PROP += $(DEVICE_PATH)/vendor.prop
 
 # QCOM hardware
 BOARD_USES_QCOM_HARDWARE := true
 
 # Recovery
-TARGET_RECOVERY_FSTAB := $(COMMON_PATH)/rootdir/etc/fstab.qcom
+TARGET_RECOVERY_FSTAB := $(DEVICE_PATH)/rootdir/etc/fstab.qcom
 
 # Releasetools
 TARGET_RECOVERY_UPDATER_LIBS := librecovery_updater_asus
-TARGET_RELEASETOOLS_EXTENSIONS := $(COMMON_PATH)
+TARGET_RELEASETOOLS_EXTENSIONS := $(DEVICE_PATH)
 
 # RIL
 ENABLE_VENDOR_RIL_SERVICE := true
@@ -127,11 +132,11 @@ ENABLE_VENDOR_RIL_SERVICE := true
 # Sepolicy
 include device/qcom/sepolicy-legacy-um/SEPolicy.mk
 
-BOARD_VENDOR_SEPOLICY_DIRS += $(COMMON_PATH)/sepolicy/vendor
-PRODUCT_PRIVATE_SEPOLICY_DIRS += $(COMMON_PATH)/sepolicy/private
+BOARD_VENDOR_SEPOLICY_DIRS += $(DEVICE_PATH)/sepolicy/vendor
+PRODUCT_PRIVATE_SEPOLICY_DIRS += $(DEVICE_PATH)/sepolicy/private
 
 # Soong namespaces
-PRODUCT_SOONG_NAMESPACES += $(COMMON_PATH)
+PRODUCT_SOONG_NAMESPACES += $(DEVICE_PATH)
 
 # Treble
 BOARD_VNDK_VERSION := current
@@ -159,4 +164,5 @@ WIFI_HIDL_UNIFIED_SUPPLICANT_SERVICE_RC_ENTRY := true
 WPA_SUPPLICANT_VERSION := VER_0_8_X
 
 # Inherit the proprietary files
-include vendor/asus/sdm660-common/BoardConfigVendor.mk
+include vendor/asus/X00TD/BoardConfigVendor.mk
+
