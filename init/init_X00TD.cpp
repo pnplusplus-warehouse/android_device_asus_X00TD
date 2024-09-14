@@ -40,8 +40,7 @@
 using android::base::GetProperty;
 using std::string;
 
-void property_override(string prop, string value)
-{
+void property_override(string prop, string value) {
     auto pi = (prop_info*) __system_property_find(prop.c_str());
 
     if (pi != nullptr)
@@ -74,11 +73,10 @@ void NFC_check() {
 }
 
 void load_X00TD() {
-
     string device, fingerprint, name;
 
     device = "ASUS_X00T_2";
-    fingerprint = "Android/sdm660_64/sdm660_64:9/PKQ1/16.2017.2009.087-20200826:user/release-keys";
+    fingerprint = "asus/WW_X00TD/ASUS_X00T_2:0/PKQ1/16.2017.2009.087-20200826:user/release-keys";
     name = "WW_X00TD";
 
     string prop_partitions[] = { "", "odm.", "system.",
